@@ -1,4 +1,4 @@
-# aioRedisMQ
+# AioRedisMQ
 Lightweight Message Queue & Broker base on async python redis streams
 
 # Suitable Application Environment
@@ -10,7 +10,7 @@ The following problems are suitable for using message queuing：
 
 - Asynchronous processing
 - Flow control
-- mq.png
+- Service decoupling
 - Connect flow computing
 - As a publish / subscribe system
 
