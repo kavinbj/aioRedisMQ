@@ -19,6 +19,17 @@ The Redis Stream is a new data type introduced with Redis 5.0, which models a lo
 Redis Streams doubles as a communication channel for building streaming architectures and as a log-like data structure 
 for persisting data, making Streams the perfect solution for event sourcing.
 
+The stream type published in redis5.0 is also used to implement typical message queues. 
+The emergence of this stream type meets almost all the requirements of message queues, 
+including but not limited to:
+- Serialization generation of message ID
+- Message traversal
+- Blocking and non blocking reading of messages
+- Group consumption of messages
+- Unfinished message processing
+- Message queue monitoring
+
+
 # Comparison of basic concepts
 Common distributed message system, including RabbitMQ 、 RocketMQ 、 Kafka 、Pulsar 、Redis streams
 
