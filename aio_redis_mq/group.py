@@ -1,8 +1,8 @@
 """
 name: group
-author：felix
-createdAt: 2022/7/17
-version: 1.0.0
+author：kavinbj
+createdAt: 2021/7/17
+version: 2.0.0
 description:
 
 """

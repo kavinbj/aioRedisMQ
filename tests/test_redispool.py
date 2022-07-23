@@ -1,10 +1,10 @@
 """
 name: test_redispool
-author：felix
-createdAt: 2022/7/20
-version: 1.0.0
+author：kavinbj
+createdAt: 2021/7/20
+version: 2.0.0
 description:
-pip install pytest-asyncio
+
 """
 import aioredis
 import pytest

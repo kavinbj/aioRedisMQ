@@ -1,8 +1,8 @@
 """
-name: example04_group
-author：felix
-createdAt: 2022/7/18
-version: 1.0.0
+name: example05_group_consumer
+author：kavinbj
+createdAt: 2021/7/18
+version: 2.0.0
 description:
 
 Here we use a block read message API and do not detect pending messages or handle idle messages

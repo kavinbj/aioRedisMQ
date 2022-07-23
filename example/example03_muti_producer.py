@@ -1,8 +1,8 @@
 """
-name: examole01_pubsub
-author：felix
-createdAt: 2022/7/18
-version: 1.0.0
+name: test_group
+author：kavinbj
+createdAt: 2021/7/18
+version: 2.0.0
 description:
 
 """

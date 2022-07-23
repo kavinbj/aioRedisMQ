@@ -1,8 +1,8 @@
 """
-name: example04_group
-author：felix
-createdAt: 2022/7/18
-version: 1.0.0
+name: example06_group_consumer_claim
+author：kavinbj
+createdAt: 2021/7/18
+version: 2.0.0
 description:
 
 Here, we handle idle messages and detect pending messages before block read new messages.
