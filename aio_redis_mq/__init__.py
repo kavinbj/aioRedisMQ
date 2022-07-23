@@ -4,16 +4,7 @@ author：kavinbj
 createdAt: 2021/7/1
 version: 2.0.0
 description:
-
-
-
-
-
-
 """
-
-
-
 __version__ = "2.0.0"
 __author__ = "Kavin K"
 __credits__ = "Felix Williams"
