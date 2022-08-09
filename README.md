@@ -1,4 +1,4 @@
-# aio_redis_mq
+# aio-redis-mq
 Lightweight Message Queue & Broker base on async python redis streams
 
 # Suitable Application Environment
