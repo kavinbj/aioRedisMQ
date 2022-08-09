@@ -400,6 +400,12 @@ message consumer, MQClient with a specific stream key
     Acknowledges the successful processing of one or more messages.
     * `msg_id`: message ids to acknowledge.        
        
+       
+# Test 
+```bash
+cd tests
+pytest --u root --p password --url localhost -vs --cov --cov-report=html
+```
             
 # Developer
 kavinbj

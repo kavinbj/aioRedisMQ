@@ -15,7 +15,7 @@ import time
 # sys.path.append("..")
 from aio_redis_mq import MQProducer, GroupManager, Group, GroupConsumer
 
-_redis_url = 'redis://root:kavin321@localhost/1'
+_redis_url = 'redis://root:xxxxx@localhost/1'
 
 
 async def producer_task(producer):
