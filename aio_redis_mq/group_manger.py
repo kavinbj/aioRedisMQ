@@ -24,6 +24,7 @@ from aioredis.connection import (
 
 from typing import (
     Awaitable,
+    Optional,
     Union
 )
 
@@ -68,11 +69,17 @@ class Manager(MQClient):
 
 class GroupManager(Manager):
 
-    def __init__(self, stream_key: KeyT, redis_name: str = None, **kwargs):
+    def __init__(
+        self,
+        stream_key: KeyT,
+        redis_name: str = None,
+        redis_url: Optional[str] = None,
+        **kwargs
+    ):
         """
         GroupManager create method
-        :param redis_name:
         :param stream_key: key of the stream.
+        :param redis_name:
         :param kwargs:
         """
         if not stream_key:
@@ -81,7 +88,7 @@ class GroupManager(Manager):
         if not redis_name:
             raise AioGroupError('redis name is None')
 
-        super().__init__(redis_name=redis_name, **kwargs)
+        super().__init__(redis_name=redis_name, redis_url=redis_url, **kwargs)
 
         self._groups = {}
         self.redis_name = redis_name
@@ -109,7 +116,8 @@ class GroupManager(Manager):
         # create a new group command
         try:
             result = await self._redis_pool.xgroup_create(self.stream_key, group_name, id=msg_id, mkstream=mkstream)
-            logger.info(f'stream={self.stream_key} group_name={group_name} xgroup_create { "successful" if result else "failed"}')
+            logger.info(f'stream={self.stream_key} group_name={group_name} xgroup_create '
+                        f'{ "successful" if result else "failed"}')
 
         except aioredis.exceptions.RedisError as e:
             if str(e) == 'BUSYGROUP Consumer Group name already exists':
@@ -140,8 +148,3 @@ class GroupManager(Manager):
         :return:
         """
         return await self._redis_pool.xinfo_groups(self.stream_key)
-
-
-
-
-

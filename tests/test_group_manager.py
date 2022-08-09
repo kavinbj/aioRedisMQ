@@ -8,8 +8,8 @@ description:
 """
 import pytest
 
-import sys
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import RedisPool, GroupManager, Group, exceptions
 
 
@@ -130,9 +130,3 @@ async def test_group_manager_delete_group(get_redis_url):
     groups_info_after_delete = await group_manager.get_groups_info()
 
     assert len(groups_info_before_delete) == len(groups_info_after_delete) + 1
-
-
-
-
-
-

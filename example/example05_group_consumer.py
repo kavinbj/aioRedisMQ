@@ -10,10 +10,9 @@ You need to implement the processing strategy of idle messages (e.g: claim idle 
 and the reading of pending messages by yourself when the server starts.
 """
 import asyncio
-import sys
 import time
-
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import MQProducer, GroupManager, Group, GroupConsumer
 
 _redis_url = 'redis://root:kavin321@localhost/1'
@@ -36,16 +35,16 @@ async def consumer_task(consumer: GroupConsumer):
         if len(msg) > 0 and len(msg[0][1]) > 0:
             msg_id = msg[0][1][0][0]
             ack_result = await consumer.ack_message(msg_id)
-            print(f'group_consumer {consumer.consumer_id} group={consumer.group_name} ack message id={msg_id} {"successful" if ack_result else "failed"}.')
+            print(f'group_consumer {consumer.consumer_id} group={consumer.group_name} ack message id='
+                  f'{msg_id} {"successful" if ack_result else "failed"}.')
 
 
 # show info
 async def show_groups_infor(group: Group):
-
-    print(f'-----------------------------{group.group_name}---------- groups info --------------------------------------')
+    print(f'-----------------------------{group.group_name}---------- groups info ------------------------------------')
     group_info = await group.get_groups_info()
     print(f'group name: {group.group_name} groups info : {group_info}')
-    print(f'-----------------------------{group.group_name}--------- consumer info -------------------------------------')
+    print(f'-----------------------------{group.group_name}--------- consumer info -----------------------------------')
     consumer_info = await group.get_consumers_info()
     print(f'group name: {group.group_name} consumer info : {consumer_info}')
     print(f'-----------------------------{group.group_name}-------- pending info -------------------------------------')
@@ -82,19 +81,13 @@ async def main():
         consumer_task(consumer5)
     )
 
-    print(f'------------------------------------- show total infor -------------------------------------')
+    print('------------------------------------- show total infor -------------------------------------')
     stream_info = await group_manager.get_stream_info(group_manager.stream_key)
     print(f'stream_key: {group_manager.stream_key} stream info : {stream_info}')
 
     await show_groups_infor(group1)
-
     await show_groups_infor(group2)
 
 
 if __name__ == '__main__':
     asyncio.run(main())
-
-
-
-
-

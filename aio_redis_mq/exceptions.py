@@ -6,7 +6,6 @@ version: 2.0.0
 description:
 
 """
-
 from aioredis import exceptions
 
 
@@ -24,6 +23,3 @@ class AioGroupCreateError(AioRedisMQException):
 
 class AioRedisMQValueError(AioRedisMQException):
     pass
-
-
-

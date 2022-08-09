@@ -8,8 +8,8 @@ description:
 """
 import aioredis
 import pytest
-import sys
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import RedisPool, MQProducer
 
 
@@ -52,6 +52,3 @@ async def test_producer_query_stream_messages(get_redis_url):
     assert first_message_info[0] == stream_info.get('first-entry')
 
     assert last_message_info[0] == stream_info.get('last-entry')
-
-
-

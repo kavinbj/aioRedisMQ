@@ -5,8 +5,9 @@ createdAt: 2021/7/20
 version: 2.0.0
 description:
 
-"""
+pytest --u root --p password --url localhost -vs --cov --cov-report=html
 
+"""
 import asyncio
 import pytest
 
@@ -60,4 +61,3 @@ def event_loop():
     loop = asyncio.new_event_loop()
     yield loop
     loop.close()
-

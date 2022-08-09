@@ -175,7 +175,7 @@ class Group(AbsGroup):
         min_msg_id: Optional[StreamIdT],
         max_msg_id: Optional[StreamIdT],
         count: Optional[int],
-        consumer_id: Optional[ConsumerT] = None,
+        consumer_id: Optional[ConsumerT] = None
     ) -> Awaitable:
         """
         Returns information about pending messages, in a range.
@@ -209,7 +209,7 @@ class Group(AbsGroup):
         time: Optional[int] = None,
         retrycount: Optional[int] = None,
         force: bool = False,
-        justid: bool = False,
+        justid: bool = False
     ) -> Awaitable:
         """
         Changes the ownership of a pending message.
@@ -231,4 +231,3 @@ class Group(AbsGroup):
         """
         return self._redis_pool.xclaim(self.stream_key, self.group_name, consumer_id, min_idle_time, msg_ids,
                                        idle=idle, time=time, retrycount=retrycount, force=force, justid=justid)
-

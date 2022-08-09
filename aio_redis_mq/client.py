@@ -20,7 +20,8 @@ from .exceptions import (
 from typing import (
     Optional,
     Awaitable,
-    Union
+    Union,
+    TypeVar
 )
 
 _StringLikeT = Union[bytes, str, memoryview]
@@ -30,19 +31,34 @@ GroupT = _StringLikeT  # Consumer group id
 ConsumerT = _StringLikeT  # Consumer name
 StreamIdT = Union[int, _StringLikeT]
 
+_MQClient = TypeVar("_MQClient", bound="MQClient")
+
 
 class MQClient:
     """
       aioRedisMQ client
     """
-    def __init__(self, redis_name=None, **kwargs):
+    def __init__(
+        self,
+        redis_name: Optional[str] = None,
+        redis_url: Optional[str] = None,
+        redis_pool: aioredis.client.Redis = None,
+        **kwargs
+    ):
+        """
+        basic client of message system, which can manage and query messages
+        :param redis_name: name for cache redis client
+        :param redis_url: redis server url
+        :param redis_pool: aioredis.client.Redis instance, defaults to None
+        :param kwargs:
+        """
         super().__init__()
 
-        if 'redis_pool' in kwargs:
-            self._redis_pool = kwargs.get('redis_pool')
+        if redis_pool is not None:
+            self._redis_pool = redis_pool
 
-        elif redis_name is not None or ('redis_url' in kwargs and kwargs.get('redis_url') is not None):
-            self._redis_pool = RedisPool.get_redis_pool(redis_name, **kwargs)
+        elif redis_name is not None or redis_url is not None:
+            self._redis_pool = RedisPool.get_redis_pool(redis_name, redis_url=redis_url, **kwargs)
 
         else:
             raise AioRedisMQException('bad parameter, check redis_name redis_url or redis_pool.')
@@ -53,7 +69,7 @@ class MQClient:
         redis_name: Optional[str],
         redis_url: Optional[str] = None,
         **kwargs
-    ):
+    ) -> _MQClient:
         """
         A class method for create MQ Client instance
         :param redis_name: redis server name
@@ -64,10 +80,13 @@ class MQClient:
         return cls(redis_name=redis_name, redis_url=redis_url, **kwargs)
 
     @classmethod
-    def create_from_redis_pool(cls, redis_pool: aioredis.client.Redis = None):
+    def create_from_redis_pool(
+        cls,
+        redis_pool: aioredis.client.Redis = None
+    ) -> _MQClient:
         """
-        class method , return aioredis.client.Redis instance
-        :param redis_pool:
+        A class method for create MQ Client instance
+        :param redis_pool: aioredis.client.Redis instance
         :return:
         """
         if not redis_pool or not isinstance(redis_pool, aioredis.client.Redis):
@@ -104,7 +123,7 @@ class MQClient:
         stream_key: KeyT,
         min_id: StreamIdT = "-",
         max_id: StreamIdT = "+",
-        count: Optional[int] = None,
+        count: Optional[int] = None
     ) -> Awaitable:
         """
         Read stream values within an interval.
@@ -171,5 +190,3 @@ class MQClient:
         :return:
         """
         return self._redis_pool.xtrim(stream_key, maxlen=maxlen, approximate=approximate)
-
-

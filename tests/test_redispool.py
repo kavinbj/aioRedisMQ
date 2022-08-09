@@ -8,8 +8,8 @@ description:
 """
 import aioredis
 import pytest
-import sys
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import RedisPool, exceptions
 
 
@@ -82,5 +82,3 @@ async def test_redis_close_redis(get_redis_url):
         assert isinstance(redis_pool, aioredis.client.Redis)
     exec_msg = e.value.args[0]
     assert exec_msg == 'no _test_local1 cache instance, You must specify a redis_url'
-
-

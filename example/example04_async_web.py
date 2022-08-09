@@ -9,9 +9,8 @@ description:
 import time
 from sanic import Sanic, response
 import asyncio
-import sys
-
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import RedisPool, MQProducer, MQConsumer
 
 _redis_url = 'redis://root:kavin321@localhost/1'
@@ -25,12 +24,12 @@ async def consumer_task():
     while True:
         msg = await consumer.block_read_messages(block=0)
         await asyncio.sleep(0.5)
-        print(f'consumer block read message', msg)
+        print('consumer block read message', msg)
 
 
 @app.listener('after_server_start')
 async def notify_server_started(_app: Sanic, _loop):
-    print('notify_server_started')
+    print('notify_server_started, tap http://localhost:2000/pub in web browser')
     # When the asynchronous web framework （sanic） starts, a new loop will be generated.
     # so redis client needs to be initialized here, and cache the redis name
     await RedisPool.init_redis('_web_redis', redis_url=_redis_url)
@@ -57,7 +56,8 @@ async def test1(request):
 
     # create producer via cached redis name
     producer = MQProducer('pub_stream', redis_name='_web_redis')
-    send_msg_id = await producer.send_message({'msg': f'message_{counter}', 'content': time.strftime("%Y-%m-%d %H:%M:%S")})
+    send_msg_id = await producer.send_message({'msg': f'message_{counter}',
+                                               'content': time.strftime("%Y-%m-%d %H:%M:%S")})
     print(f'producer request task time at {time.strftime("%Y-%m-%d %H:%M:%S")}', f'message id={send_msg_id}')
 
     return response.text(f'produce message_{counter} successful')

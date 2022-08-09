@@ -11,8 +11,8 @@ import aioredis
 import pytest
 import time
 
-import sys
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import RedisPool, MQProducer, MQConsumer
 
 
@@ -88,7 +88,3 @@ async def test_consumer_block_read_messages(get_redis_url):
     check_list = [len(set(x)) == 1 for x in list(zip(*msg_ids_list))]
 
     assert all(check_list) is True
-
-
-
-

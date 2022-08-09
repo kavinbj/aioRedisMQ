@@ -9,9 +9,8 @@ description:
 import asyncio
 import pytest
 import time
-
-import sys
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import RedisPool, GroupManager, MQProducer, exceptions, GroupConsumer
 
 
@@ -70,7 +69,6 @@ async def test_group_consumer_instance(get_redis_url):
     assert e.type is exceptions.AioGroupError
     assert exec_msg == 'group name is None'
 
-
     with pytest.raises(exceptions.AioGroupError) as e:
         consumer = GroupConsumer('_test_stream1', '_group_name', '', redis_name='_test_local1',
                                  redis_pool=redis_pool, group=group_instance)
@@ -86,7 +84,6 @@ async def test_group_consumer_instance(get_redis_url):
     exec_msg = e.value.args[0]
     assert e.type is exceptions.AioGroupError
     assert exec_msg == 'group instance is None'
-
 
 
 async def producer_task(producer):
@@ -124,15 +121,14 @@ async def test_group_multi_group(get_redis_url):
     consumer3 = await group2.create_consumer('_consumer3')
     consumer4 = await group2.create_consumer('_consumer4')
 
-    producer_ids_list, \
-    consumer1_ids_list, consumer2_ids_list, \
-    consumer3_ids_list, consumer4_ids_list = await asyncio.gather(
-        producer_task(producer),
-        consumer_task(consumer1),
-        consumer_task(consumer2),
-        consumer_task(consumer3),
-        consumer_task(consumer4),
-    )
+    producer_ids_list, consumer1_ids_list, consumer2_ids_list, consumer3_ids_list, consumer4_ids_list = \
+        await asyncio.gather(
+            producer_task(producer),
+            consumer_task(consumer1),
+            consumer_task(consumer2),
+            consumer_task(consumer3),
+            consumer_task(consumer4)
+        )
 
     group1_ids_list = sorted(consumer1_ids_list + consumer2_ids_list)
     group2_ids_list = sorted(consumer3_ids_list + consumer4_ids_list)
@@ -194,4 +190,3 @@ async def test_group_ack_messages(get_redis_url):
     consumer1_pending_messages_after_ack = await consumer1.query_pending_messages('-', '+', 100)
 
     assert len(consumer1_pending_messages_before_ack) == len(consumer1_pending_messages_after_ack) + 1
-

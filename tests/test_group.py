@@ -11,8 +11,8 @@ import asyncio
 import pytest
 import time
 
-import sys
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import RedisPool, GroupManager, Group, MQProducer, exceptions, GroupConsumer
 
 
@@ -23,8 +23,7 @@ async def test_clear_key(get_redis_url):
     assert results >= 0
 
 
-@pytest.mark.asyncio
-async def test_group_create(get_redis_url):
+def test_group_create_miss_redis_pool():
     with pytest.raises(exceptions.AioGroupError) as e:
         group = Group('_test_stream1', '_group_name', redis_name=None, redis_pool=None)
         assert isinstance(group, Group)
@@ -32,6 +31,8 @@ async def test_group_create(get_redis_url):
     assert e.type is exceptions.AioGroupError
     assert exec_msg == 'parameter missing redis_pool or missing redis_name redis_url'
 
+
+def test_group_create_miss_redis_name(get_redis_url):
     redis_pool = RedisPool.get_redis_pool('_test_local1', redis_url=get_redis_url)
     with pytest.raises(exceptions.AioGroupError) as e:
         group = Group('_test_stream1', '_group_name', redis_name=None, redis_url=get_redis_url, redis_pool=redis_pool)
@@ -40,6 +41,8 @@ async def test_group_create(get_redis_url):
     assert e.type is exceptions.AioGroupError
     assert exec_msg == 'redis name is None'
 
+
+def test_group_create_miss_stream_key(get_redis_url):
     with pytest.raises(exceptions.AioGroupError) as e:
         group = Group('', '_group_name', redis_name='_test_local1', redis_url=get_redis_url)
         assert isinstance(group, Group)
@@ -47,6 +50,8 @@ async def test_group_create(get_redis_url):
     assert e.type is exceptions.AioGroupError
     assert exec_msg == 'stream key is None'
 
+
+def test_group_create_miss_group_name(get_redis_url):
     with pytest.raises(exceptions.AioGroupError) as e:
         group = Group('_test_stream1', '', redis_name='_test_local1', redis_url=get_redis_url)
         assert isinstance(group, Group)
@@ -267,6 +272,3 @@ async def test_group_delete_consumer(get_redis_url):
     consumers_info_after_delete = await group.get_consumers_info()
 
     assert len(consumers_info_before_delete) == len(consumers_info_after_delete) + 1
-
-
-

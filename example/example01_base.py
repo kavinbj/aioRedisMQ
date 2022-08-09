@@ -8,9 +8,8 @@ description:
 """
 
 import asyncio
-import sys
-
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import RedisPool, MQClient, MQProducer, MQConsumer
 
 _redis_url = 'redis://root:kavin321@localhost/1'
@@ -103,9 +102,3 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
-
-
-
-
-
-

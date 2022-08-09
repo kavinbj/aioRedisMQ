@@ -60,7 +60,7 @@ class RedisPool:
         :param redis_name: cache a aioredis pool instance based on this name
         :param redis_url: aioredis client url
         :param decode_responses: indicates whether to decode responses automatically.
-        :param kwargs: refer to: https://aioredis.readthedocs.io/en/latest/api/high-level/#aioredis.client.Redis.from_url
+        :param kwargs:refer to: https://aioredis.readthedocs.io/en/latest/api/high-level/#aioredis.client.Redis.from_url
            other keywords argument
            For example:
            db:int = 0,  database number
@@ -126,10 +126,3 @@ class RedisPool:
         await redis_pool.close()
         cls.__redis_cache.pop(redis_name)
         logger.info(f'redis {redis_name} connection close.')
-
-
-
-
-
-
-

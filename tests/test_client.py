@@ -8,8 +8,9 @@ description:
 """
 import aioredis
 import pytest
-import sys
-sys.path.append("..")
+
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import RedisPool, MQClient, MQProducer, exceptions
 
 
@@ -29,6 +30,8 @@ async def test_client_create(get_redis_url):
     redis_pool = client._redis_pool
     assert isinstance(redis_pool, aioredis.client.Redis)
 
+
+def test_client_exception():
     with pytest.raises(exceptions.AioRedisMQException) as e:
         client = MQClient(redis_name=None)
         assert isinstance(client, MQClient)
@@ -42,12 +45,13 @@ async def test_client_create_from_url(get_redis_url):
     assert isinstance(client, MQClient)
 
 
-@pytest.mark.asyncio
-async def test_create_from_redis_pool(get_redis_url):
+def test_create_from_redis_pool(get_redis_url):
     redis_pool = RedisPool.get_redis_pool('_test_local1', redis_url=get_redis_url)
     client = MQClient.create_from_redis_pool(redis_pool=redis_pool)
     assert isinstance(client, MQClient)
 
+
+def test_create_from_redis_pool_exception():
     with pytest.raises(exceptions.AioRedisMQException) as e:
         client = MQClient.create_from_redis_pool(redis_pool=None)
         assert isinstance(client, MQClient)
@@ -59,9 +63,7 @@ async def test_create_from_redis_pool(get_redis_url):
 @pytest.mark.asyncio
 async def test_client_check_health(get_redis_url):
     redis_pool = RedisPool.get_redis_pool('_test_local1', redis_url=get_redis_url)
-
     client = MQClient.create_from_redis_pool(redis_pool=redis_pool)
-
     is_health = await client.check_health()
 
     assert is_health is True
@@ -82,10 +84,7 @@ async def test_client_query_messages(get_redis_url):
     # get stream info
     stream_info = await client.get_stream_info('_test_stream1')
 
-    # print('stream_info', stream_info)
-
     assert stream_info.get('length') == stream_length
-
     assert stream_info.get('last-generated-id') == send_msg_id
 
     # get first_message_info
@@ -140,5 +139,3 @@ async def test_client_trim_stream(get_redis_url):
     stream_length_after_trim = await client.get_stream_length('_test_stream1')
 
     assert stream_length_before_trim == stream_length_after_trim + 1
-
-

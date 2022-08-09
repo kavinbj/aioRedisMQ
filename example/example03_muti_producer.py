@@ -7,10 +7,9 @@ description:
 
 """
 import asyncio
-import sys
 import time
-
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import MQProducer, MQConsumer
 
 _redis_url = 'redis://root:kavin321@localhost/1'
@@ -25,7 +24,7 @@ async def producer_task(producer: MQProducer, producer_index: int):
 
 async def consumer_task(consumer: MQConsumer, consumer_index: int):
     for _ in range(0, 20):
-    # while True:
+        # while True:
         msg = await consumer.block_read_messages('pub_stream1', 'pub_stream2', block=1500)
         await asyncio.sleep(0.05)
         print(f'consumer_{consumer_index} block read message', msg)
@@ -50,9 +49,5 @@ async def main():
         consumer_task(consumer3, 3)
     )
 
-
 if __name__ == '__main__':
     asyncio.run(main())
-
-
-

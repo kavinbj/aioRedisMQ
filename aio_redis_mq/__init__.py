@@ -5,10 +5,6 @@ createdAt: 2021/7/1
 version: 2.0.0
 description:
 """
-__version__ = "2.0.0"
-__author__ = "Kavin K"
-__credits__ = "Felix Williams"
-
 import logging
 from .client import MQClient
 from .redispool import RedisPool
@@ -22,6 +18,9 @@ from .group import Group
 logging.basicConfig(level=logging.DEBUG)
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
+__version__ = '2.0.0'
+__author__ = 'kavinbj'
+__credits__ = 'felix Williams'
 
 __all__ = [
     "MQClient",
@@ -32,4 +31,3 @@ __all__ = [
     'Group',
     'GroupConsumer'
 ]
-

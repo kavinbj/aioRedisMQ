@@ -7,6 +7,7 @@ description:
 
 """
 from .client import MQClient
+import aioredis
 from aioredis.connection import (
     EncodableT,
 )
@@ -28,18 +29,21 @@ class MQConsumer(MQClient):
     def __init__(
         self,
         stream_key: KeyT,
-        redis_name: str = None,
+        redis_name: Optional[str] = None,
+        redis_url: Optional[str] = None,
+        redis_pool: aioredis.client.Redis = None,
         **kwargs
     ):
         """
         consumer client in message queue based on a specific stream key
         :param stream_key:
-        :param redis_name:
+        :param redis_name: name for cache redis client
+        :param redis_url: redis server url
+        :param redis_pool: aioredis.client.Redis instance, defaults to None
         :param kwargs:
         """
         self.stream_key = stream_key
-        self.redis_name = redis_name
-        super().__init__(redis_name=redis_name, **kwargs)
+        super().__init__(redis_name=redis_name, redis_url=redis_url, redis_pool=redis_pool, **kwargs)
 
     def read_messages(
         self,
@@ -47,7 +51,6 @@ class MQConsumer(MQClient):
         count: Optional[int] = None
     ) -> Awaitable:
         """
-        Block and monitor multiple streams for new data.
         consumer specific method, read messages from streams as message containers
         :param streams: a dict of stream keys to stream IDs, where
                IDs indicate the last ID already seen.
@@ -76,4 +79,3 @@ class MQConsumer(MQClient):
         # set the corresponding ID to $，and can block new messages
         _streams = dict(zip(_stream_key, ['$'] * len(_stream_key)))
         return self.redis_pool.xread(_streams, count=count, block=block)
-

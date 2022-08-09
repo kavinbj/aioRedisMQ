@@ -13,11 +13,10 @@ And, it will detect pending messages before blocking read messages when the serv
 
 """
 import asyncio
-import sys
 import time
 import logging
-
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from aio_redis_mq import MQProducer, GroupManager, Group, GroupConsumer
 
 _redis_url = 'redis://root:kavin321@localhost/1'
@@ -225,7 +224,8 @@ async def consumer_task(consumer: GroupConsumer):
         if len(msg) > 0 and len(msg[0][1]) > 0:
             msg_id = msg[0][1][0][0]
             ack_result = await consumer.ack_message(msg_id)
-            print(f'group_consumer {consumer.consumer_id} group={consumer.group_name} ack message id={msg_id} {"successful" if ack_result else "failed"}.')
+            print(f'group_consumer {consumer.consumer_id} group={consumer.group_name} '
+                  f'ack message id={msg_id} {"successful" if ack_result else "failed"}.')
 
 
 async def show_group_infor(group: Group):
@@ -233,16 +233,15 @@ async def show_group_infor(group: Group):
     stream_info = await group.get_stream_info(group.stream_key)
     print(f'stream_key: {group.stream_key} stream info : {stream_info}')
 
-    print(f'------------------------------------- groups info --------------------------------------')
+    print('------------------------------------- groups info --------------------------------------')
     group_info = await group.get_groups_info()
     print(f'group name: {group.group_name} groups info : {group_info}')
-    print(f'------------------------------------- consumer info -------------------------------------')
+    print('------------------------------------- consumer info -------------------------------------')
     consumer_info = await group.get_consumers_info()
     print(f'group name: {group.group_name} consumer info : {consumer_info}')
-    print(f'------------------------------------- pending info -------------------------------------')
+    print('------------------------------------- pending info -------------------------------------')
     pending_info = await group.get_pending_info()
     print(f'group name: {group.group_name} pending info : {pending_info}')
-
 
 
 async def main():
@@ -275,14 +274,8 @@ async def main():
     )
 
     # await show_group_infor(group1)
-
     await show_group_infor(group2)
 
 
 if __name__ == '__main__':
     asyncio.run(main())
-
-
-
-
-

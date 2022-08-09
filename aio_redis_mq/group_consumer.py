@@ -15,7 +15,6 @@ from .exceptions import (
     AioGroupError
 )
 
-
 from aioredis.connection import (
     EncodableT,
 )
@@ -134,7 +133,7 @@ class GroupConsumer(AbsGroupConsumer):
         noack: bool = False
     ) -> Awaitable:
         """
-        Read from a stream via a consumer group.
+        Block read from a stream via a consumer group.
         :param stream_key: a list of stream key
         :param block: number of milliseconds to wait, if nothing already present.
         :param count: if set, only return this many items, beginning with the earliest available
@@ -173,6 +172,3 @@ class GroupConsumer(AbsGroupConsumer):
         :return:
         """
         return self._redis_pool.xack(self.stream_key, self.group_name, *msg_id)
-
-
-
